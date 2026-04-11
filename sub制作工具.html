@@ -433,6 +433,93 @@
     transform: translateY(-2px);
   }
 
+  /* Pan */
+  .pan-mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  @media (max-width: 480px) {
+    .pan-mode-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .pan-btn {
+    padding: 10px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+  }
+
+  .pan-btn.active {
+    border-color: rgba(143,208,255,0.45);
+    background: rgba(143,208,255,0.08);
+    color: var(--accent3);
+  }
+
+  .pan-btn:hover:not(.active) {
+    border-color: rgba(143,208,255,0.2);
+    color: var(--text);
+  }
+
+  .pan-visual-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .pan-side-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent3);
+    min-width: 14px;
+    text-align: center;
+    opacity: 0.8;
+  }
+
+  .pan-track-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  .pan-center-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1px;
+    height: 10px;
+    background: rgba(143,208,255,0.3);
+    pointer-events: none;
+  }
+
+  .pan-value-display {
+    font-size: 12px;
+    color: var(--accent3);
+    opacity: 0.6;
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+
+  .sweep-info-box {
+    background: rgba(143,208,255,0.04);
+    border: 1px solid rgba(143,208,255,0.15);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: rgba(143,208,255,0.65);
+    line-height: 1.7;
+    text-align: center;
+  }
+
   .info-box {
     background: rgba(143,208,255,0.05);
     border: 1px solid rgba(143,208,255,0.15);
@@ -542,11 +629,68 @@
     </div>
   </div>
 
+  <!-- Pan Card -->
+  <div class="card">
+    <p class="card-label">02.5 — 声相设置</p>
+    <div class="controls-grid">
+
+      <!-- Pan mode -->
+      <div class="control-group">
+        <label>声相模式</label>
+        <div class="pan-mode-grid">
+          <button class="pan-btn active" data-pan="none" onclick="setPanMode('none',this)">🔇 关闭</button>
+          <button class="pan-btn" data-pan="fixed" onclick="setPanMode('fixed',this)">📍 固定</button>
+          <button class="pan-btn" data-pan="alternate" onclick="setPanMode('alternate',this)">↔ 左右交替</button>
+          <button class="pan-btn" data-pan="sweep" onclick="setPanMode('sweep',this)">🌊 自动扫描</button>
+        </div>
+      </div>
+
+      <!-- Fixed pan slider -->
+      <div class="control-group" id="fixedPanGroup" style="display:none">
+        <label>声相位置</label>
+        <div class="pan-visual-row">
+          <span class="pan-side-label">L</span>
+          <div class="pan-track-wrap">
+            <input type="range" id="panSlider" min="-100" max="100" value="0"
+                   oninput="updatePanDisplay(this)">
+            <div class="pan-center-mark"></div>
+          </div>
+          <span class="pan-side-label">R</span>
+        </div>
+        <p class="pan-value-display" id="panValDisplay">中央 (0)</p>
+      </div>
+
+      <!-- Alternate options -->
+      <div class="control-group" id="altPanGroup" style="display:none">
+        <label>交替强度</label>
+        <div class="pan-visual-row">
+          <span class="pan-side-label" style="opacity:0.4">弱</span>
+          <div class="pan-track-wrap">
+            <input type="range" id="altStrengthSlider" min="10" max="100" value="70"
+                   oninput="updateAltStrength(this)">
+          </div>
+          <span class="pan-side-label" style="opacity:0.4">强</span>
+        </div>
+        <p class="pan-value-display" id="altStrVal">±70 (奇数层左，偶数层右)</p>
+      </div>
+
+      <!-- Sweep options -->
+      <div class="control-group" id="sweepPanGroup" style="display:none">
+        <div class="sweep-info-box">
+          声音会在整段音频中缓慢从左声道飘向右声道，形成 3D 环绕感
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Info -->
   <div class="card" style="padding:20px 28px">
     <div class="info-box">
       💡 <strong>顺序拼接</strong>：音频一个接一个，适合做长时间循环背景音<br>
-      💡 <strong>同步叠加</strong>：多层音频同时播放，声音会更厚、更深沉，适合强化版 sub
+      💡 <strong>同步叠加</strong>：多层音频同时播放，声音会更厚、更深沉，适合强化版 sub<br>
+      💡 <strong>左右交替</strong>：双耳交替刺激，潜意识效果更均衡深入<br>
+      💡 <strong>自动扫描</strong>：声场缓缓移动，营造空间感与沉浸感
     </div>
   </div>
 
@@ -577,7 +721,60 @@
 <script>
 let audioBuffer = null;
 let currentMode = 'concat';
+let currentPanMode = 'none';
 let audioCtx = null;
+
+// Pan mode
+function setPanMode(mode, btn) {
+  currentPanMode = mode;
+  document.querySelectorAll('.pan-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fixedPanGroup').style.display  = mode === 'fixed'    ? 'block' : 'none';
+  document.getElementById('altPanGroup').style.display    = mode === 'alternate' ? 'block' : 'none';
+  document.getElementById('sweepPanGroup').style.display  = mode === 'sweep'     ? 'block' : 'none';
+}
+
+function updatePanDisplay(el) {
+  updateSlider(el, '');
+  const v = parseInt(el.value);
+  document.getElementById('panValDisplay').textContent =
+    v === 0 ? '中央 (0)' : v < 0 ? `左 (${v})` : `右 (+${v})`;
+}
+
+function updateAltStrength(el) {
+  updateSlider(el, '');
+  document.getElementById('altStrVal').textContent = `±${el.value} (奇数层靠左，偶数层靠右)`;
+}
+
+function connectWithPan(ctx, src, panValue, gainValue, startTime) {
+  // always output stereo (2ch) when pan is active
+  const gain = ctx.createGain();
+  gain.gain.value = gainValue;
+  if (Math.abs(panValue) < 0.001) {
+    src.connect(gain);
+    gain.connect(ctx.destination);
+    src.start(startTime);
+    return;
+  }
+  const panner = ctx.createStereoPanner();
+  panner.pan.value = panValue;
+  src.connect(gain);
+  gain.connect(panner);
+  panner.connect(ctx.destination);
+  src.start(startTime);
+}
+
+function connectWithSweep(ctx, src, gainValue, sweepStart, sweepEnd, audioStart, duration) {
+  const gain = ctx.createGain();
+  gain.gain.value = gainValue;
+  const panner = ctx.createStereoPanner();
+  panner.pan.setValueAtTime(sweepStart, audioStart);
+  panner.pan.linearRampToValueAtTime(sweepEnd, audioStart + duration);
+  src.connect(gain);
+  gain.connect(panner);
+  panner.connect(ctx.destination);
+  src.start(audioStart);
+}
 
 // Particles
 function spawnParticle() {
@@ -602,6 +799,8 @@ function updateSlider(el, valId) {
 }
 updateSlider(document.getElementById('repeatSlider'), 'repeatVal');
 updateSlider(document.getElementById('volSlider'), '');
+updateSlider(document.getElementById('panSlider'), '');
+updateSlider(document.getElementById('altStrengthSlider'), '');
 
 // Mode
 function setMode(mode, btn) {
@@ -666,6 +865,13 @@ async function processAudio() {
   const repeats = parseInt(document.getElementById('repeatSlider').value);
   const volPct = parseInt(document.getElementById('volSlider').value) / 100;
   const mode = currentMode;
+  const panMode = currentPanMode;
+  const fixedPan = parseInt(document.getElementById('panSlider').value) / 100;
+  const altStrength = parseInt(document.getElementById('altStrengthSlider').value) / 100;
+
+  // Need stereo output if any pan is active
+  const needStereo = panMode !== 'none';
+  const outChannels = needStereo ? 2 : audioBuffer.numberOfChannels;
 
   document.getElementById('processBtn').disabled = true;
   document.getElementById('downloadArea').classList.remove('show');
@@ -676,42 +882,60 @@ async function processAudio() {
 
   progressFill.style.width = '5%';
   progressText.textContent = '正在初始化...';
-
   await new Promise(r => setTimeout(r, 50));
 
   const sampleRate = audioBuffer.sampleRate;
-  const channels = audioBuffer.numberOfChannels;
   const duration = audioBuffer.duration;
-
   let offlineCtx;
 
   if (mode === 'concat') {
-    // Sequential concat
     const totalDuration = duration * repeats;
-    offlineCtx = new OfflineAudioContext(channels, Math.ceil(sampleRate * totalDuration), sampleRate);
+    offlineCtx = new OfflineAudioContext(outChannels, Math.ceil(sampleRate * totalDuration), sampleRate);
 
     for (let i = 0; i < repeats; i++) {
       const src = offlineCtx.createBufferSource();
       src.buffer = audioBuffer;
-      src.connect(offlineCtx.destination);
-      src.start(i * duration);
+      const startTime = i * duration;
+
+      if (panMode === 'none') {
+        src.connect(offlineCtx.destination);
+        src.start(startTime);
+      } else if (panMode === 'fixed') {
+        connectWithPan(offlineCtx, src, fixedPan, 1, startTime);
+      } else if (panMode === 'alternate') {
+        const pan = (i % 2 === 0) ? -altStrength : altStrength;
+        connectWithPan(offlineCtx, src, pan, 1, startTime);
+      } else if (panMode === 'sweep') {
+        // each repeat sweeps L→R
+        connectWithSweep(offlineCtx, src, 1, -1, 1, startTime, duration);
+      }
 
       progressFill.style.width = (5 + (i / repeats) * 60) + '%';
       progressText.textContent = `拼接第 ${i+1}/${repeats} 层...`;
       if (i % 5 === 0) await new Promise(r => setTimeout(r, 0));
     }
   } else {
-    // Overlay
-    offlineCtx = new OfflineAudioContext(channels, Math.ceil(sampleRate * duration), sampleRate);
+    // overlay
+    offlineCtx = new OfflineAudioContext(outChannels, Math.ceil(sampleRate * duration), sampleRate);
 
     for (let i = 0; i < repeats; i++) {
-      const gainNode = offlineCtx.createGain();
-      gainNode.gain.value = volPct;
       const src = offlineCtx.createBufferSource();
       src.buffer = audioBuffer;
-      src.connect(gainNode);
-      gainNode.connect(offlineCtx.destination);
-      src.start(0);
+
+      if (panMode === 'none') {
+        const g = offlineCtx.createGain();
+        g.gain.value = volPct;
+        src.connect(g);
+        g.connect(offlineCtx.destination);
+        src.start(0);
+      } else if (panMode === 'fixed') {
+        connectWithPan(offlineCtx, src, fixedPan, volPct, 0);
+      } else if (panMode === 'alternate') {
+        const pan = (i % 2 === 0) ? -altStrength : altStrength;
+        connectWithPan(offlineCtx, src, pan, volPct, 0);
+      } else if (panMode === 'sweep') {
+        connectWithSweep(offlineCtx, src, volPct, -1, 1, 0, duration);
+      }
 
       progressFill.style.width = (5 + (i / repeats) * 60) + '%';
       progressText.textContent = `叠加第 ${i+1}/${repeats} 层...`;
@@ -745,11 +969,10 @@ async function processAudio() {
 
   const dl = document.getElementById('downloadLink');
   dl.href = url;
-  dl.download = `subliminal_x${repeats}_${mode}.wav`;
+  dl.download = `subliminal_x${repeats}_${mode}_${panMode}.wav`;
   document.getElementById('downloadArea').classList.add('show');
   document.getElementById('processBtn').disabled = false;
 
-  // Burst particles
   for (let i = 0; i < 12; i++) spawnParticle();
 }
 
