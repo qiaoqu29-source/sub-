@@ -3,417 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>✦ Subliminal Studio Pro</title>
+<title>✦ Subliminal Studio Ultra</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0d0a12;
     --surface: #13101c;
-    --surface2: #1a1525;
-    --border: rgba(200,170,255,0.12);
     --accent: #c8a8ff;
     --accent2: #f0c0e8;
-    --accent3: #8fd0ff;
     --text: #e8e0f5;
     --muted: rgba(232,224,245,0.45);
-    --glow: rgba(200,168,255,0.18);
+    --border: rgba(200,170,255,0.12);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; padding: 40px 24px; }
+  header { text-align: center; margin-bottom: 40px; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 30px; margin-bottom: 16px; }
+  .card-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); opacity: 0.6; margin-bottom: 15px; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(120,80,200,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 80% 90%, rgba(200,100,180,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 60% at 90% 20%, rgba(80,150,220,0.10) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.6;
-    z-index: 0;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 60px 24px 80px;
-  }
-
-  header { text-align: center; margin-bottom: 56px; }
-
-  .eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.7;
-    margin-bottom: 16px;
-  }
-
-  h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(42px, 8vw, 64px);
-    font-weight: 300;
-    line-height: 1.1;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 12px;
-  }
-
-  .subtitle { font-size: 14px; color: var(--muted); line-height: 1.6; }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.6;
-    margin-bottom: 20px;
-    font-weight: 500;
-  }
-
-  .upload-zone {
-    border: 1.5px dashed rgba(200,168,255,0.25);
-    border-radius: 14px;
-    padding: 48px 24px;
-    text-align: center;
-    cursor: pointer;
-    background: rgba(200,168,255,0.02);
-  }
-
+  .upload-zone { border: 1.5px dashed rgba(200,168,255,0.25); border-radius: 14px; padding: 40px; text-align: center; cursor: pointer; }
   #fileInput { display: none; }
+  
+  .slider-display { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+  .slider-value { font-family: 'Cormorant Garamond', serif; font-size: 42px; color: var(--accent); }
+  
+  input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: rgba(200,168,255,0.1); outline: none; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
 
-  .upload-icon { font-size: 36px; margin-bottom: 14px; display: block; }
-
-  .file-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    color: var(--accent2);
-    margin-top: 10px;
-    font-style: italic;
-  }
-
-  .controls-grid { display: grid; gap: 28px; }
-
-  .control-group label {
-    display: block;
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-
-  .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-  .mode-btn {
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 13px;
-  }
-
-  .mode-btn.active {
-    border-color: rgba(200,168,255,0.45);
-    background: rgba(200,168,255,0.08);
-    color: var(--accent);
-  }
-
-  .slider-display {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-
-  .slider-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent) var(--pct, 0%), rgba(200,168,255,0.15) var(--pct, 0%));
-    outline: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--accent);
-  }
-
-  .process-btn {
-    width: 100%;
-    padding: 18px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgba(180,130,255,0.15), rgba(100,170,255,0.1));
-    border: 1px solid rgba(200,168,255,0.35);
-    color: var(--accent);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    cursor: pointer;
-  }
-
-  .process-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .process-btn { width: 100%; padding: 18px; border-radius: 14px; background: rgba(200,168,255,0.1); border: 1px solid var(--accent); color: var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 20px; cursor: pointer; transition: 0.3s; }
+  .process-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .process-btn:hover:not(:disabled) { background: rgba(200,168,255,0.2); }
 
   .progress-area { display: none; margin-top: 20px; }
-  .progress-area.show { display: block; }
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.2s linear; }
+  .progress-text { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; }
 
-  .progress-bar-track { height: 3px; background: rgba(200,168,255,0.1); border-radius: 2px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; background: var(--accent); transition: width 0.1s; }
-
-  .download-area { display: none; text-align: center; padding-top: 8px; }
-  .download-area.show { display: block; }
-
-  .download-btn {
-    display: inline-flex;
-    padding: 14px 32px;
-    border-radius: 100px;
-    background: rgba(200,168,255,0.2);
-    border: 1px solid var(--accent);
-    color: var(--text);
-    text-decoration: none;
-  }
+  .download-area { display: none; text-align: center; margin-top: 20px; }
+  .download-btn { display: inline-block; padding: 14px 30px; border-radius: 100px; background: var(--accent); color: var(--bg); text-decoration: none; font-weight: 500; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <header>
-    <p class="eyebrow">✦ Professional Audio Manifestation</p>
-    <h1>Subliminal<br>Studio Pro</h1>
-  </header>
+  <header><h1>Subliminal Ultra</h1></header>
 
   <div class="card">
-    <p class="card-label">01 — 上传</p>
-    <div class="upload-zone" id="uploadZone">
+    <p class="card-label">01 — 音源</p>
+    <div class="upload-zone" id="dropZone">
       <input type="file" id="fileInput" accept="audio/*">
-      <span class="upload-icon">✦</span>
-      <p id="fileName" class="file-name" style="display:none"></p>
-      <p class="upload-text">点击或拖拽肯定语音频</p>
+      <p id="fileStatus">点击上传音频</p>
     </div>
   </div>
 
   <div class="card">
-    <p class="card-label">02 — 高级设置</p>
-    <div class="controls-grid">
-      <div class="control-group">
-        <label>叠加模式</label>
-        <div class="mode-toggle">
-          <button class="mode-btn active" onclick="setMode('concat', this)">🔗 顺序拼接</button>
-          <button class="mode-btn" onclick="setMode('overlay', this)">✦ 同步叠加</button>
-        </div>
-      </div>
+    <p class="card-label">02 — 参数 (极速版)</p>
+    <div style="margin-bottom: 25px;">
+      <label style="font-size:12px; color:var(--muted)">重复/叠加次数 (2 - 1000)</label>
+      <div class="slider-display"><span class="slider-value" id="repeatVal">10</span><span>次</span></div>
+      <input type="range" id="repeatSlider" min="2" max="1000" value="10" oninput="document.getElementById('repeatVal').innerText=this.value">
+    </div>
 
-      <div class="control-group">
-        <label>重复次数 (Max 1000)</label>
-        <div class="slider-display">
-          <span class="slider-value" id="repeatVal">10</span>
-          <span class="slider-unit">次</span>
-        </div>
-        <input type="range" id="repeatSlider" min="2" max="1000" value="10" oninput="updateSlider(this, 'repeatVal')">
-      </div>
-
-      <div class="control-group" id="volGroup" style="display:none">
-        <label>每层音量 (Min 1%)</label>
-        <div class="slider-display">
-          <span class="slider-value" id="volVal">80</span>
-          <span class="slider-unit">%</span>
-        </div>
-        <input type="range" id="volSlider" min="1" max="100" value="80" oninput="updateSlider(this, 'volVal')">
-      </div>
+    <div style="margin-bottom: 10px;">
+      <label style="font-size:12px; color:var(--muted)">每层音量 (1% - 100%)</label>
+      <div class="slider-display"><span class="slider-value" id="volVal">80</span><span>%</span></div>
+      <input type="range" id="volSlider" min="1" max="100" value="80" oninput="document.getElementById('volVal').innerText=this.value">
     </div>
   </div>
 
   <div class="card">
-    <p class="card-label">03 — 生成</p>
-    <button class="process-btn" id="processBtn" disabled onclick="processAudio()">✦ 开始处理</button>
+    <button class="process-btn" id="processBtn" disabled onclick="startProcessing()">开始极速处理</button>
+    
     <div class="progress-area" id="progressArea">
-      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
-      <p id="progressText" style="font-size:12px; margin-top:10px; text-align:center"></p>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <p class="progress-text" id="progressText">准备中...</p>
     </div>
+
     <div class="download-area" id="downloadArea">
-      <a class="download-btn" id="downloadLink">⬇ 下载高频音频</a>
+      <a class="download-btn" id="downloadLink">下载生成的音频</a>
     </div>
   </div>
 </div>
 
 <script>
 let audioBuffer = null;
-let currentMode = 'concat';
-let audioCtx = null;
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-function updateSlider(el, valId) {
-  const pct = ((el.value - el.min) / (el.max - el.min) * 100).toFixed(1);
-  el.style.setProperty('--pct', pct + '%');
-  if (valId) document.getElementById(valId).textContent = el.value;
-}
-updateSlider(document.getElementById('repeatSlider'), 'repeatVal');
-updateSlider(document.getElementById('volSlider'), 'volVal');
-
-function setMode(mode, btn) {
-  currentMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('volGroup').style.display = mode === 'overlay' ? 'block' : 'none';
-}
-
+const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
-document.getElementById('uploadZone').onclick = () => fileInput.click();
-fileInput.onchange = (e) => {
+
+dropZone.onclick = () => fileInput.click();
+fileInput.onchange = async (e) => {
   const file = e.target.files[0];
-  if (file) {
-    document.getElementById('fileName').textContent = file.name;
-    document.getElementById('fileName').style.display = 'block';
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      audioCtx = audioCtx || new AudioContext();
-      audioBuffer = await audioCtx.decodeAudioData(ev.target.result);
-      document.getElementById('processBtn').disabled = false;
-    };
-    reader.readAsArrayBuffer(file);
-  }
+  if (!file) return;
+  document.getElementById('fileStatus').innerText = "加载中...";
+  const arrayBuffer = await file.arrayBuffer();
+  audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+  document.getElementById('fileStatus').innerText = `已就绪: ${file.name}`;
+  document.getElementById('processBtn').disabled = false;
 };
 
-async function processAudio() {
+async function startProcessing() {
   const repeats = parseInt(document.getElementById('repeatSlider').value);
-  const vol = parseInt(document.getElementById('volSlider').value) / 100;
+  const vol = document.getElementById('volSlider').value / 100;
   const btn = document.getElementById('processBtn');
   const fill = document.getElementById('progressFill');
   const txt = document.getElementById('progressText');
-  
+
   btn.disabled = true;
-  document.getElementById('progressArea').classList.add('show');
-  document.getElementById('downloadArea').classList.remove('show');
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('downloadArea').style.display = 'none';
 
-  const { sampleRate, numberOfChannels: channels, duration } = audioBuffer;
-  let offlineCtx;
+  const { sampleRate, numberOfChannels, duration } = audioBuffer;
+  // 计算时长：1000次叠加的时长与原音频一致
+  const offlineCtx = new OfflineAudioContext(numberOfChannels, Math.ceil(sampleRate * duration), sampleRate);
 
-  if (currentMode === 'concat') {
-    offlineCtx = new OfflineAudioContext(channels, Math.ceil(sampleRate * duration * repeats), sampleRate);
-    for (let i = 0; i < repeats; i++) {
-      const src = offlineCtx.createBufferSource();
-      src.buffer = audioBuffer;
-      src.connect(offlineCtx.destination);
-      src.start(i * duration);
-      if (i % 20 === 0) {
-        fill.style.width = (i / repeats * 50) + '%';
-        txt.textContent = `编排中: ${i}/${repeats}`;
-        await new Promise(r => setTimeout(r, 0));
-      }
-    }
-  } else {
-    offlineCtx = new OfflineAudioContext(channels, Math.ceil(sampleRate * duration), sampleRate);
-    for (let i = 0; i < repeats; i++) {
-      const src = offlineCtx.createBufferSource();
-      const gain = offlineCtx.createGain();
-      gain.gain.value = vol;
-      src.buffer = audioBuffer;
-      src.connect(gain).connect(offlineCtx.destination);
-      src.start(0);
-      if (i % 20 === 0) {
-        fill.style.width = (i / repeats * 50) + '%';
-        txt.textContent = `叠加中: ${i}/${repeats}`;
-        await new Promise(r => setTimeout(r, 0));
-      }
+  txt.innerText = "正在注入潜意识层...";
+  
+  // 分批次处理以提高性能，避免阻塞
+  const batchSize = 50;
+  for (let i = 0; i < repeats; i++) {
+    const source = offlineCtx.createBufferSource();
+    const gainNode = offlineCtx.createGain();
+    
+    source.buffer = audioBuffer;
+    gainNode.gain.value = vol;
+    
+    source.connect(gainNode);
+    gainNode.connect(offlineCtx.destination);
+    source.start(0);
+
+    if (i % batchSize === 0) {
+      const progress = Math.round((i / repeats) * 60);
+      fill.style.width = progress + "%";
+      txt.innerText = `正在叠加第 ${i} 层...`;
+      await new Promise(r => setTimeout(r, 0)); // 让出主线程
     }
   }
 
-  txt.textContent = "量子渲染中，请稍候...";
   fill.style.width = "70%";
-  const rendered = await offlineCtx.startRendering();
+  txt.innerText = "量子渲染中 (这步最快)...";
+
+  const renderedBuffer = await offlineCtx.startRendering();
   
-  txt.textContent = "正在封装 WAV...";
   fill.style.width = "90%";
-  const blob = bufferToWav(rendered);
+  txt.innerText = "正在导出高保真文件...";
   
-  document.getElementById('downloadLink').href = URL.createObjectURL(blob);
-  document.getElementById('downloadLink').download = `sub_x${repeats}.wav`;
-  document.getElementById('downloadArea').classList.add('show');
-  document.getElementById('progressArea').classList.remove('show');
+  const wavBlob = bufferToWav(renderedBuffer);
+  const url = URL.createObjectURL(wavBlob);
+  
+  document.getElementById('downloadLink').href = url;
+  document.getElementById('downloadLink').download = `sub_ultra_x${repeats}.wav`;
+  
+  fill.style.width = "100%";
+  txt.innerText = "生成成功！";
+  document.getElementById('downloadArea').style.display = 'block';
   btn.disabled = false;
 }
 
-function bufferToWav(buffer) {
-  const numChannels = buffer.numberOfChannels;
-  const sampleRate = buffer.sampleRate;
-  const samples = buffer.length;
-  const blockAlign = numChannels * 2;
-  const dataSize = samples * blockAlign;
-  const arrayBuffer = new ArrayBuffer(44 + dataSize);
-  const view = new DataView(arrayBuffer);
+// 高效 WAV 编码器
+function bufferToWav(abuffer) {
+  let numOfChan = abuffer.numberOfChannels,
+      length = abuffer.length * numOfChan * 2 + 44,
+      buffer = new ArrayBuffer(length),
+      view = new DataView(buffer),
+      channels = [], i, sample,
+      offset = 0,
+      pos = 0;
 
-  const writeString = (offset, string) => {
-    for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i));
-  };
+  function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
+  function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
 
-  writeString(0, 'RIFF');
-  view.setUint32(4, 36 + dataSize, true);
-  writeString(8, 'WAVE');
-  writeString(12, 'fmt ');
-  view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);
-  view.setUint16(22, numChannels, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * blockAlign, true);
-  view.setUint16(32, blockAlign, true);
-  view.setUint16(34, 16, true);
-  writeString(36, 'data');
-  view.setUint32(40, dataSize, true);
+  setUint32(0x46464952); setUint32(length - 8); setUint32(0x45564157);
+  setUint32(0x20746d66); setUint32(16); setUint16(1); setUint16(numOfChan);
+  setUint32(abuffer.sampleRate); setUint32(abuffer.sampleRate * 2 * numOfChan);
+  setUint16(numOfChan * 2); setUint16(16); setUint32(0x61746164); setUint32(length - pos - 4);
 
-  let offset = 44;
-  for (let i = 0; i < samples; i++) {
-    for (let ch = 0; ch < numChannels; ch++) {
-      let s = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
-      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-      offset += 2;
+  for(i=0; i<numOfChan; i++) channels.push(abuffer.getChannelData(i));
+
+  while(pos < length) {
+    for(i=0; i<numOfChan; i++) {
+      sample = Math.max(-1, Math.min(1, channels[i][offset]));
+      sample = (sample < 0 ? sample * 0x8000 : sample * 0x7FFF);
+      view.setInt16(pos, sample, true);
+      pos += 2;
     }
+    offset++;
   }
-  return new Blob([arrayBuffer], { type: 'audio/wav' });
+  return new Blob([buffer], {type: "audio/wav"});
 }
 </script>
 </body>
