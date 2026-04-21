@@ -28,223 +28,60 @@
     font-weight: 300;
     min-height: 100vh;
     overflow-x: hidden;
-    position: relative;
   }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(120,80,200,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 80% 90%, rgba(200,100,180,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 60% at 90% 20%, rgba(80,150,220,0.10) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.6;
-    z-index: 0;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 60px 24px 80px;
-  }
-
+  
+  .container { max-width: 680px; margin: 0 auto; padding: 60px 24px 80px; }
   header { text-align: center; margin-bottom: 56px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); opacity: 0.7; margin-bottom: 16px; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(42px, 8vw, 64px); font-weight: 300; line-height: 1.1; background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px; margin-bottom: 16px; }
+  .card-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); opacity: 0.6; margin-bottom: 20px; font-weight: 500; }
 
-  .eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.7;
-    margin-bottom: 16px;
-  }
-
-  h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(42px, 8vw, 64px);
-    font-weight: 300;
-    line-height: 1.1;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 12px;
-  }
-
-  .subtitle { font-size: 14px; color: var(--muted); line-height: 1.6; }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.6;
-    margin-bottom: 20px;
-    font-weight: 500;
-  }
-
-  .upload-zone {
-    border: 1.5px dashed rgba(200,168,255,0.25);
-    border-radius: 14px;
-    padding: 48px 24px;
-    text-align: center;
-    cursor: pointer;
-    background: rgba(200,168,255,0.02);
-  }
-
+  .upload-zone { border: 1.5px dashed rgba(200,168,255,0.25); border-radius: 14px; padding: 48px 24px; text-align: center; cursor: pointer; background: rgba(200,168,255,0.02); }
   #fileInput { display: none; }
-
   .upload-icon { font-size: 36px; margin-bottom: 14px; display: block; }
-
-  .file-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    color: var(--accent2);
-    margin-top: 10px;
-    font-style: italic;
-  }
+  .file-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--accent2); margin-top: 10px; font-style: italic; }
 
   .controls-grid { display: grid; gap: 28px; }
-  
-  /* NEW STYLE FOR HZ INPUT */
-  .hz-input-group {
-    display: flex;
-    align-items: center;
+  .control-group label { display: block; font-size: 12px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 14px; text-transform: uppercase; }
+  .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-btn { padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-size: 13px; }
+  .mode-btn.active { border-color: rgba(200,168,255,0.45); background: rgba(200,168,255,0.08); color: var(--accent); }
+
+  /* Generic Input Field Style */
+  .input-field {
+    width: 100%;
+    padding: 12px 16px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 4px;
-  }
-  
-  .hz-input-group input {
-    flex-grow: 1;
-    padding: 10px 14px;
-    background: transparent;
-    border: none;
     color: var(--text);
     font-size: 16px;
     outline: none;
     font-family: 'DM Sans', sans-serif;
   }
-  
-  .hz-input-group .hz-unit {
-    padding-right: 14px;
-    font-size:16px;
-    color: var(--muted);
-  }
+   .input-field::placeholder { color: var(--muted); opacity: 0.5; }
 
-  .control-group label {
-    display: block;
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
+  /* Sections that can be toggled */
+  .settings-section { display: none; }
+  .settings-section.active { display: grid; gap: 28px; }
 
-  .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  /* Slider styles */
+  .slider-display { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
+  .slider-value { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--accent); line-height: 1; }
+  input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent) var(--pct, 0%), rgba(200,168,255,0.15) var(--pct, 0%)); outline: none; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
 
-  .mode-btn {
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 13px;
-  }
-
-  .mode-btn.active {
-    border-color: rgba(200,168,255,0.45);
-    background: rgba(200,168,255,0.08);
-    color: var(--accent);
-  }
-
-  .slider-display {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-
-  .slider-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent) var(--pct, 0%), rgba(200,168,255,0.15) var(--pct, 0%));
-    outline: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--accent);
-  }
-
-  .process-btn {
-    width: 100%;
-    padding: 18px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgba(180,130,255,0.15), rgba(100,170,255,0.1));
-    border: 1px solid rgba(200,168,255,0.35);
-    color: var(--accent);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    cursor: pointer;
-  }
-
+  /*CTA Button and Progress */
+  .process-btn { width: 100%; padding: 18px; border-radius: 14px; background: linear-gradient(135deg, rgba(180,130,255,0.15), rgba(100,170,255,0.1)); border: 1px solid rgba(200,168,255,0.35); color: var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 20px; cursor: pointer; margin-top: 12px; }
   .process-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
   .progress-area { display: none; margin-top: 20px; }
   .progress-area.show { display: block; }
-
   .progress-bar-track { height: 3px; background: rgba(200,168,255,0.1); border-radius: 2px; overflow: hidden; }
   .progress-bar-fill { height: 100%; background: var(--accent); transition: width 0.1s; }
-
   .download-area { display: none; text-align: center; padding-top: 8px; }
-  .download-area.show { display: block; }
-
-  .download-btn {
-    display: inline-flex;
-    padding: 14px 32px;
-    border-radius: 100px;
-    background: rgba(200,168,255,0.2);
-    border: 1px solid var(--accent);
-    color: var(--text);
-    text-decoration: none;
-  }
+  .download-area.show { display: block;}
+  .download-btn { display: inline-flex; padding: 14px 32px; border-radius: 100px; background: rgba(200,168,255,0.2); border: 1px solid var(--accent); color: var(--text); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -256,7 +93,7 @@
   </header>
 
   <div class="card">
-    <p class="card-label">01 — 上传</p>
+    <p class="card-label">01 — 上传音频</p>
     <div class="upload-zone" id="uploadZone">
       <input type="file" id="fileInput" accept="audio/*">
       <span class="upload-icon">✦</span>
@@ -266,77 +103,86 @@
   </div>
 
   <div class="card">
-    <p class="card-label">02 — 高级设置</p>
-    <div class="controls-grid">
-      <div class="control-group">
-        <label>叠加模式</label>
-        <div class="mode-toggle">
-          <button class="mode-btn active" onclick="setMode('concat', this)">🔗 顺序拼接</button>
-          <button class="mode-btn" onclick="setMode('overlay', this)">✦ 同步叠加</button>
-        </div>
-      </div>
+    <p class="card-label">02 — 选择处理模式</p>
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setProcessMode('repeatSection', this)">🔄 重复处理</button>
+        <button class="mode-btn" onclick="setProcessMode('modulateSection', this)">⚡ 高频处理</button>
+    </div>
+    <hr style="border-color: rgba(200,170,255,0.1); margin: 28px 0; border-style: solid;">
 
-       <!-- NEW HERTZ FREQUENCY CONTROL -->
+    <!-- Settings for Repeat Mode -->
+    <div id="repeatSection" class="settings-section active">
+        <div class="control-group">
+            <label>▶️ 叠加方式</label>
+            <div class="mode-toggle">
+              <button class="mode-btn active" data-submode="concat" onclick="setRepeatSubMode('concat', this)">🔗 顺序拼接</button>
+              <button class="mode-btn" data-submode="overlay" onclick="setRepeatSubMode('overlay', this)">✦ 同步叠加</button>
+            </div>
+        </div>
+        <div class="control-group">
+            <label>🔁 重复次数 (Max 1000)</label>
+            <div class="slider-display"><span class="slider-value" id="repeatVal">10</span><span class="slider-unit">次</span></div>
+            <input type="range" id="repeatSlider" min="2" max="1000" value="10" oninput="updateSlider(this, 'repeatVal')">
+        </div>
+        <div class="control-group" id="volGroup" style="display:none">
+            <label>🔈 每层音量 (Min 1%)</label>
+            <div class="slider-display"><span class="slider-value" id="volVal">80</span><span class="slider-unit">%</span></div>
+            <input type="range" id="volSlider" min="1" max="100" value="80" oninput="updateSlider(this, 'volVal')">
+        </div>
+    </div>
+    
+    <!-- Settings for High-Frequency Mode -->
+    <div id="modulateSection" class="settings-section">
       <div class="control-group">
-        <label>赫兹频率 (目标采样率)</label>
-        <div class="hz-input-group">
-          <input type="number" id="hzInput" placeholder="默认使用原音频频率">
-          <span class="hz-unit">Hz</span>
-        </div>
+        <label for="hzInput">🎯 目标高频赫兹 (例如 17500)</label>
+        <input type="number" id="hzInput" class="input-field" placeholder="建议 16000-19000" value="17500">
       </div>
-
-      <div class="control-group">
-        <label>重复次数 (Max 1000)</label>
-        <div class="slider-display">
-          <span class="slider-value" id="repeatVal">10</span>
-          <span class="slider-unit">次</span>
-        </div>
-        <input type="range" id="repeatSlider" min="2" max="1000" value="10" oninput="updateSlider(this, 'repeatVal')">
-      </div>
-
-      <div class="control-group" id="volGroup" style="display:none">
-        <label>每层音量 (Min 1%)</label>
-        <div class="slider-display">
-          <span class="slider-value" id="volVal">80</span>
-          <span class="slider-unit">%</span>
-        </div>
-        <input type="range" id="volSlider" min="1" max="100" value="80" oninput="updateSlider(this, 'volVal')">
+      <div class="info-box" style="font-size: 13px; color: var(--muted); line-height: 1.6; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+          此模式将把你的音频内容“搭载”到指定的高频声波上，使其在“听不见”的超声波范围内播放。
       </div>
     </div>
   </div>
 
   <div class="card">
-    <p class="card-label">03 — 生成</p>
+    <p class="card-label">03 — 生成并下载</p>
     <button class="process-btn" id="processBtn" disabled onclick="processAudio()">✦ 开始处理</button>
     <div class="progress-area" id="progressArea">
       <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
       <p id="progressText" style="font-size:12px; margin-top:10px; text-align:center"></p>
     </div>
     <div class="download-area" id="downloadArea">
-      <a class="download-btn" id="downloadLink">⬇ 下载高频音频</a>
+      <a class="download-btn" id="downloadLink">⬇ 下载已处理音频</a>
     </div>
   </div>
 </div>
 
 <script>
 let audioBuffer = null;
-let currentMode = 'concat';
 let audioCtx = null;
+let currentProcessMode = 'repeatSection';
+let repeatSubMode = 'concat';
 
+// --- UI Management ---
 function updateSlider(el, valId) {
   const pct = ((el.value - el.min) / (el.max - el.min) * 100).toFixed(1);
   el.style.setProperty('--pct', pct + '%');
   if (valId) document.getElementById(valId).textContent = el.value;
 }
-updateSlider(document.getElementById('repeatSlider'), 'repeatVal');
-updateSlider(document.getElementById('volSlider'), 'volVal');
+['repeatSlider', 'volSlider'].forEach(id => updateSlider(document.getElementById(id), id.replace('Slider', 'Val')));
 
+function setProcessMode(sectionId, btn) {
+    currentProcessMode = sectionId;
+    document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    document.querySelectorAll('.mode-btn[onclick^="setProcessMode"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
 
-function setMode(mode, btn) {
-  currentMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('volGroup').style.display = mode === 'overlay' ? 'block' : 'none';
+function setRepeatSubMode(submode, btn) {
+    repeatSubMode = submode;
+    document.querySelectorAll('button[data-submode]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('volGroup').style.display = submode === 'overlay' ? 'block' : 'none';
 }
 
 const fileInput = document.getElementById('fileInput');
@@ -348,8 +194,195 @@ fileInput.onchange = (e) => {
     document.getElementById('fileName').style.display = 'block';
     const reader = new FileReader();
     reader.onload = async (ev) => {
-      // Use a consistent AudioContext
       audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      audioBuffer = await audioCtx.decodeAudioData(ev.target.result).catch(err => {
+          alert("无法解析音频文件，请确保文件格式正确且未损坏。");
+          console.error(err);
+      });
+      if(audioBuffer) document.getElementById('processBtn').disabled = false;
+    };
+    reader.readAsArrayBuffer(file);
+  }
+};
+
+// --- Core Audio Processing ---
+async function processAudio() {
+    if (!audioBuffer) { return; }
+    
+    // UI setup for processing
+    const btn = document.getElementById('processBtn');
+    const progressArea = document.getElementById('progressArea');
+    const fill = document.getElementById('progressFill');
+    const txt = document.getElementById('progressText');
+    const downloadArea = document.getElementById('downloadArea');
+    
+    btn.disabled = true;
+    progressArea.classList.add('show');
+    downloadArea.classList.remove('show');
+    fill.style.width = '0%';
+    txt.textContent = '初始化处理环境...';
+
+    // Route to the correct processor based on user's choice
+    if (currentProcessMode === 'modulateSection') {
+        await processModulation(progressArea, fill, txt);
+    } else {
+        await processRepetition(progressArea, fill, txt);
+    }
+    
+    btn.disabled = false;
+}
+
+// --- NEW Modulation Processor ---
+async function processModulation(progressArea, fill, txt) {
+    const targetFreq = parseInt(document.getElementById('hzInput').value);
+    if (isNaN(targetFreq) || targetFreq <= 0) {
+        alert("请输入一个有效的高频赫兹值 (如 17500)。");
+        progressArea.classList.remove('show');
+        return;
+    }
+
+    const { duration, numberOfChannels, sampleRate } = audioBuffer;
+    const offlineCtx = new OfflineAudioContext(numberOfChannels, duration * sampleRate, sampleRate);
+
+	  txt.textContent = `创建 ${targetFreq}Hz 载波...`;
+    fill.style.width = '20%';
+    await new Promise(r => setTimeout(r, 10)); // Allow UI update
+
+    // The Carrier: A high-frequency sine wave (e.g., 17500Hz)
+    const carrier = offlineCtx.createOscillator();
+    carrier.type = 'sine';
+    carrier.frequency.value = targetFreq;
+    carrier.start();
+
+    // The Modulator: Your original audio file
+    const modulator = offlineCtx.createBufferSource();
+    modulator.buffer = audioBuffer;
+    modulator.start();
+
+    // The Gain Node that ties them together
+    // Carrier's amplitude will be controlled by the modulator's signal
+    const shapingGain = offlineCtx.createGain();
+    
+    // Connect modulator to change the GAIN of the shaping node
+    modulator.connect(shapingGain.gain);
+    // Connect the carrier THROUGH the shaping node
+    carrier.connect(shapingGain);
+    shapingGain.connect(offlineCtx.destination);
+    
+    txt.textContent = `执行振幅调制...`;
+    fill.style.width = '60%';
+    await new Promise(r => setTimeout(r, 10));
+
+    // Render the final audio
+    const renderedBuffer = await offlineCtx.startRendering();
+    
+    txt.textContent = '封装为 WAV 文件...';
+    fill.style.width = '90%';
+    
+    const blob = bufferToWav(renderedBuffer);
+    const downloadName = `modulated_${targetFreq}Hz.wav`;
+    document.getElementById('downloadLink').href = URL.createObjectURL(blob);
+    document.getElementById('downloadLink').download = downloadName;
+
+    document.getElementById('downloadArea').classList.add('show');
+    progressArea.classList.remove('show');
+}
+
+
+// --- OLD Repetition Processor (with minor tweaks) ---
+async function processRepetition(progressArea, fill, txt) {
+    const repeats = parseInt(document.getElementById('repeatSlider').value);
+    const vol = parseInt(document.getElementById('volSlider').value) / 100;
+    
+    const { sampleRate, numberOfChannels, duration } = audioBuffer;
+    const totalDuration = repeatSubMode === 'concat' ? duration * repeats : duration;
+    const offlineCtx = new OfflineAudioContext(numberOfChannels, Math.ceil(totalDuration * sampleRate), sampleRate);
+    
+    if (repeatSubMode === 'concat') {
+        for (let i = 0; i < repeats; i++) {
+          const src = offlineCtx.createBufferSource();
+          src.buffer = audioBuffer;
+          src.connect(offlineCtx.destination);
+          src.start(i * duration);
+          if (i % 20 === 0) {
+            fill.style.width = (i / repeats * 70) + '%';
+            txt.textContent = `拼接中: ${i+1}/${repeats}`;
+            await new Promise(r => setTimeout(r, 0));
+          }
+        }
+    } else { // overlay mode
+        for (let i = 0; i < repeats; i++) {
+          const src = offlineCtx.createBufferSource();
+          const gain = offlineCtx.createGain();
+          gain.gain.value = vol;
+          src.buffer = audioBuffer;
+          src.connect(gain).connect(offlineCtx.destination);
+          src.start(0);
+          if (i % 20 === 0) {
+            fill.style.width = (i / repeats * 70) + '%';
+            txt.textContent = `叠加中: ${i+1}/${repeats}`;
+            await new Promise(r => setTimeout(r, 0));
+          }
+        }
+    }
+
+    txt.textContent = "正在渲染音频...";
+    fill.style.width = "80%";
+    const rendered = await offlineCtx.startRendering();
+    
+    txt.textContent = "正在封装 WAV 文件...";
+    fill.style.width = "95%";
+    const blob = bufferToWav(rendered);
+  
+    const downloadName = `sub_${repeatSubMode}_x${repeats}.wav`;
+    document.getElementById('downloadLink').href = URL.createObjectURL(blob);
+    document.getElementById('downloadLink').download = downloadName;
+    document.getElementById('downloadArea').classList.add('show');
+    progressArea.classList.remove('show');
+}
+
+
+function bufferToWav(buffer) {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const numSamples = buffer.length;
+  const dataSize = numSamples * numChannels * 2;
+  const bufferSize = 44 + dataSize;
+  const arrayBuffer = new ArrayBuffer(bufferSize);
+  const view = new DataView(arrayBuffer);
+
+  const writeString = (offset, str) => {
+    for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+  };
+
+  writeString(0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(8, 'WAVEfmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * numChannels * 2, true);
+  view.setUint16(32, numChannels * 2, true);
+  view.setUint16(34, 16, true);
+  writeString(36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  // Write PCM data
+  let offset = 44;
+  for (let i = 0; i < numSamples; i++) {
+    for (let ch = 0; ch < numChannels; ch++) {
+      let s = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
+      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      offset += 2;
+    }
+  }
+  return new Blob([view], { type: 'audio/wav' });
+}
+</script>
+</body>
+</html>
+</html>dioContext || window.webkitAudioContext)();
       audioBuffer = await audioCtx.decodeAudioData(ev.target.result);
       
       // AUTO-FILL HZ INPUT WITH ORIGINAL SAMPLE RATE
