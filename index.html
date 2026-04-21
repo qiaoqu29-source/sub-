@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>✦ Subliminal Studio Pro</title>
+<title>✦ Subliminal Studio Pro (增强版)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -37,7 +37,7 @@
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px; margin-bottom: 16px; }
   .card-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); opacity: 0.6; margin-bottom: 20px; font-weight: 500; }
 
-  .upload-zone { border: 1.5px dashed rgba(200,168,255,0.25); border-radius: 14px; padding: 48px 24px; text-align: center; cursor: pointer; background: rgba(200,168,255,0.02); }
+  .upload-zone { border: 1.5px dashed rgba(200,170,255,0.25); border-radius: 14px; padding: 48px 24px; text-align: center; cursor: pointer; background: rgba(200,168,255,0.02); }
   #fileInput { display: none; }
   .upload-icon { font-size: 36px; margin-bottom: 14px; display: block; }
   .file-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--accent2); margin-top: 10px; font-style: italic; }
@@ -48,31 +48,17 @@
   .mode-btn { padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-size: 13px; }
   .mode-btn.active { border-color: rgba(200,168,255,0.45); background: rgba(200,168,255,0.08); color: var(--accent); }
 
-  /* Generic Input Field Style */
-  .input-field {
-    width: 100%;
-    padding: 12px 16px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-size: 16px;
-    outline: none;
-    font-family: 'DM Sans', sans-serif;
-  }
+  .input-field { width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 16px; outline: none; font-family: 'DM Sans', sans-serif; }
    .input-field::placeholder { color: var(--muted); opacity: 0.5; }
 
-  /* Sections that can be toggled */
   .settings-section { display: none; }
   .settings-section.active { display: grid; gap: 28px; }
 
-  /* Slider styles */
   .slider-display { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
   .slider-value { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--accent); line-height: 1; }
   input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent) var(--pct, 0%), rgba(200,168,255,0.15) var(--pct, 0%)); outline: none; }
   input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
 
-  /*CTA Button and Progress */
   .process-btn { width: 100%; padding: 18px; border-radius: 14px; background: linear-gradient(135deg, rgba(180,130,255,0.15), rgba(100,170,255,0.1)); border: 1px solid rgba(200,168,255,0.35); color: var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 20px; cursor: pointer; margin-top: 12px; }
   .process-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .progress-area { display: none; margin-top: 20px; }
@@ -110,7 +96,6 @@
     </div>
     <hr style="border-color: rgba(200,170,255,0.1); margin: 28px 0; border-style: solid;">
 
-    <!-- Settings for Repeat Mode -->
     <div id="repeatSection" class="settings-section active">
         <div class="control-group">
             <label>▶️ 叠加方式</label>
@@ -131,13 +116,12 @@
         </div>
     </div>
     
-    <!-- Settings for High-Frequency Mode -->
     <div id="modulateSection" class="settings-section">
       <div class="control-group">
         <label for="hzInput">🎯 目标高频赫兹 (例如 17500)</label>
         <input type="number" id="hzInput" class="input-field" placeholder="建议 16000-19000" value="17500">
       </div>
-      <div class="info-box" style="font-size: 13px; color: var(--muted); line-height: 1.6; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+      <div class="info-box" style="font-size: 13px; color: var(--muted); line-height: 1.6; background: var(--surface2); padding: 14px; border-radius: 10px; border: 1px solid var(--border)">
           此模式将把你的音频内容“搭载”到指定的高频声波上，使其在“听不见”的超声波范围内播放。
       </div>
     </div>
@@ -192,14 +176,223 @@ fileInput.onchange = (e) => {
   if (file) {
     document.getElementById('fileName').textContent = file.name;
     document.getElementById('fileName').style.display = 'block';
+    
+    // Reset from previous state
+    document.getElementById('processBtn').disabled = true;
+    document.getElementById('downloadArea').classList.remove('show');
+    
     const reader = new FileReader();
     reader.onload = async (ev) => {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      audioBuffer = await audioCtx.decodeAudioData(ev.target.result).catch(err => {
-          alert("无法解析音频文件，请确保文件格式正确且未损坏。");
-          console.error(err);
-      });
-      if(audioBuffer) document.getElementById('processBtn').disabled = false;
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        audioBuffer = await audioCtx.decodeAudioData(ev.target.result);
+        document.getElementById('processBtn').disabled = false;
+      } catch (err) {
+          alert("音频文件解析失败！\n请检查文件是否为支持的音频格式（如 WAV, MP3, FLAC）且没有损坏。\n错误信息: " + err.message);
+          console.error("Audio Decode Error:", err);
+          document.getElementById('fileName').textContent = ''; 
+          document.getElementById('fileName').style.display = 'none';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+};
+
+async function processAudio() {
+    if (!audioBuffer) return;
+    
+    // UI elements
+    const { btn, progressArea, fill, txt, downloadArea } = {
+        btn: document.getElementById('processBtn'),
+        progressArea: document.getElementById('progressArea'),
+        fill: document.getElementById('progressFill'),
+        txt: document.getElementById('progressText'),
+        downloadArea: document.getElementById('downloadArea')
+    };
+    
+    btn.disabled = true;
+    progressArea.classList.add('show');
+    downloadArea.classList.remove('show');
+    fill.style.width = '0%';
+    txt.textContent = '初始化中...';
+
+    // ** Check for potential memory issues in repeat mode **
+    if (currentProcessMode === 'repeatSection' && repeatSubMode === 'concat') {
+        const repeats = parseInt(document.getElementById('repeatSlider').value, 10);
+        const estimatedSizeMB = audioBuffer.duration * audioBuffer.sampleRate * audioBuffer.numberOfChannels * 2 * repeats / (1024 * 1024);
+        if (estimatedSizeMB > 500) { // Warn if estimated file size > 500MB
+            if (!confirm(`警告：预估生成的音频文件大小约为 ${Math.round(estimatedSizeMB)}MB，这可能会导致浏览器卡顿或崩溃。是否确认继续？`)) {
+                btn.disabled = false;
+                progressArea.classList.remove('show');
+                return;
+            }
+        }
+    }
+
+    try {
+        const result = await (currentProcessMode === 'modulateSection' 
+            ? processModulation() 
+            : processRepetition());
+        
+        if (result && result.blob) {
+            document.getElementById('downloadLink').href = URL.createObjectURL(result.blob);
+            document.getElementById('downloadLink').download = result.downloadName;
+            downloadArea.classList.add('show');
+            txt.textContent = '处理完成！';
+        }
+    } catch (error) {
+        alert(error.message);
+        console.error("Processing failed:", error);
+    } finally {
+        btn.disabled = false;
+        progressArea.classList.remove('show');
+    }
+}
+
+async function processModulation() {
+    document.getElementById('progressText').textContent = '准备高频调制...';
+    
+    // Gather settings
+    const targetFreq = parseInt(document.getElementById('hzInput').value);
+    if (isNaN(targetFreq) || targetFreq <= 0) {
+      throw new Error(`高频赫兹设置无效，请输入一个正整数，例如 17500。`);
+    }
+
+    const { duration, numberOfChannels, sampleRate } = audioBuffer;
+    
+    const offlineCtx = new OfflineAudioContext(numberOfChannels, duration * sampleRate, sampleRate);
+
+	  document.getElementById('progressFill').style.width = '20%';
+
+    // Create a new buffer source for the original audio (the modulator)
+    const modulator = offlineCtx.createBufferSource();
+    modulator.buffer = audioBuffer;
+    
+    const shapingGain = offlineCtx.createGain();
+    
+    // Connect the modulator to CONTROL the GAIN of the shaping node
+    // This makes the amplitude of the output follow the modulator's waveform
+    modulator.connect(shapingGain.gain);
+
+    // Create the high-frequency carrier wave
+    const carrier = offlineCtx.createOscillator();
+    carrier.type = 'sine';
+    carrier.frequency.value = targetFreq;
+    
+    // The carrier wave flows THROUGH the gain node...
+    carrier.connect(shapingGain);
+    
+    // ...and the result goes to the destination
+    shapingGain.connect(offlineCtx.destination);
+    
+    carrier.start();
+    modulator.start();
+    
+    document.getElementById('progressText').textContent = '执行振幅调制...';
+    document.getElementById('progressFill').style.width = '60%';
+    
+    // Render the final audio in a try-catch block
+    let renderedBuffer;
+    try {
+        renderedBuffer = await offlineCtx.startRendering();
+    } catch(renderError) {
+        throw new Error(`音频渲染失败！\n可能是因为音频时长过长或设置过于极端，导致浏览器内存溢出。\n建议：尝试使用一个较短的音频文件。\n技术细节: ${renderError.message}`);
+    }
+
+    document.getElementById('progressText').textContent = '封装为 WAV 文件...';
+    document.getElementById('progressFill').style.width = '90%';
+    
+    const blob = bufferToWav(renderedBuffer);
+    const downloadName = `modulated_to_${targetFreq}Hz_sub.wav`;
+    
+    return { blob, downloadName };
+}
+
+async function processRepetition() {
+    const repeats = parseInt(document.getElementById('repeatSlider').value);
+    const vol = parseInt(document.getElementById('volSlider').value) / 100;
+    
+    const { sampleRate, numberOfChannels, duration } = audioBuffer;
+    const totalDuration = repeatSubMode === 'concat' ? duration * repeats : duration;
+    
+    const
+offlineCtx = new OfflineAudioContext(numberOfChannels, Math.ceil(totalDuration * sampleRate), sampleRate);
+    
+    const updateProgress = async (i) => {
+        if (i % 20 === 0) {
+            document.getElementById('progressFill').style.width = (i / repeats * 70) + '%';
+            document.getElementById('progressText').textContent = `${repeatSubMode === 'concat' ? '拼接' : '叠加'}中: ${i+1}/${repeats}`;
+            await new Promise(r => setTimeout(r, 0));
+        }
+    };
+    
+    if (repeatSubMode === 'concat') {
+        for (let i = 0; i < repeats; i++) {
+          const src = offlineCtx.createBufferSource();
+          src.buffer = audioBuffer;
+          src.connect(offlineCtx.destination);
+          src.start(i * duration);
+          await updateProgress(i);
+        }
+    } else { // overlay mode
+        // **Volume Normalization for Overlay**
+        const gainValue = vol / repeats; // Reduce volume of each layer to prevent clipping
+        for (let i = 0; i < repeats; i++) {
+          const src = offlineCtx.createBufferSource();
+          const gain = offlineCtx.createGain();
+          gain.gain.value = gainValue; 
+          src.buffer = audioBuffer;
+          src.connect(gain).connect(offlineCtx.destination);
+          src.start(0);
+          await updateProgress(i);
+        }
+    }
+
+    document.getElementById('progressText').textContent = '渲染最终音频...';
+    document.getElementById('progressFill').style.width = '80%';
+    
+    let rendered;
+    try {
+        rendered = await offlineCtx.startRendering();
+    } catch(renderError) {
+         throw new Error(`音频渲染失败！\n可能是因为重复次数过多，导致浏览器内存溢出。\n建议：减少重复次数或使用较短的音频文件。\n技术细节: ${renderError.message}`);
+    }
+    
+    document.getElementById('progressText').textContent = '封装为 WAV 文件...';
+    document.getElementById('progressFill').style.width = '95%';
+    
+    const blob = bufferToWav(rendered);
+    const downloadName = `sub_${repeatSubMode}_x${repeats}.wav`;
+    
+    return { blob, downloadName };
+}
+
+
+function bufferToWav(buffer) {
+    const numChannels = buffer.numberOfChannels, sampleRate = buffer.sampleRate, numSamples = buffer.length;
+    const dataSize = numSamples * numChannels * 2;
+    const bufferSize = 44 + dataSize;
+    const arrayBuffer = new ArrayBuffer(bufferSize);
+    const view = new DataView(arrayBuffer);
+    const writeString = (offset, str) => { for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i)); };
+    writeString(0, 'RIFF'); view.setUint32(4, 36 + dataSize, true); writeString(8, 'WAVEfmt ');
+    view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * numChannels * 2, true);
+    view.setUint16(32, numChannels * 2, true); view.setUint16(34, 16, true); writeString(36, 'data');
+    view.setUint32(40, dataSize, true);
+    let offset = 44;
+    for (let i = 0; i < numSamples; i++) {
+        for (let ch = 0; ch < numChannels; ch++) {
+            let s = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
+            view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+            offset += 2;
+        }
+    }
+    return new Blob([view], { type: 'audio/wav' });
+}
+</script>
+</body>
+</html>isabled = false;
     };
     reader.readAsArrayBuffer(file);
   }
