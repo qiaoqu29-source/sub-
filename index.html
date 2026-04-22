@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>✦ Subliminal Studio Pro</title>
+<title>✦ Subliminal Studio Pro (增强版)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -28,196 +28,46 @@
     font-weight: 300;
     min-height: 100vh;
     overflow-x: hidden;
-    position: relative;
   }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(120,80,200,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 80% 90%, rgba(200,100,180,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 60% at 90% 20%, rgba(80,150,220,0.10) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.6;
-    z-index: 0;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 60px 24px 80px;
-  }
-
+  
+  .container { max-width: 680px; margin: 0 auto; padding: 60px 24px 80px; }
   header { text-align: center; margin-bottom: 56px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); opacity: 0.7; margin-bottom: 16px; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(42px, 8vw, 64px); font-weight: 300; line-height: 1.1; background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px; margin-bottom: 16px; }
+  .card-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); opacity: 0.6; margin-bottom: 20px; font-weight: 500; }
 
-  .eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.7;
-    margin-bottom: 16px;
-  }
-
-  h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(42px, 8vw, 64px);
-    font-weight: 300;
-    line-height: 1.1;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 12px;
-  }
-
-  .subtitle { font-size: 14px; color: var(--muted); line-height: 1.6; }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.6;
-    margin-bottom: 20px;
-    font-weight: 500;
-  }
-
-  .upload-zone {
-    border: 1.5px dashed rgba(200,168,255,0.25);
-    border-radius: 14px;
-    padding: 48px 24px;
-    text-align: center;
-    cursor: pointer;
-    background: rgba(200,168,255,0.02);
-  }
-
+  .upload-zone { border: 1.5px dashed rgba(200,170,255,0.25); border-radius: 14px; padding: 48px 24px; text-align: center; cursor: pointer; background: rgba(200,168,255,0.02); }
   #fileInput { display: none; }
-
   .upload-icon { font-size: 36px; margin-bottom: 14px; display: block; }
-
-  .file-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    color: var(--accent2);
-    margin-top: 10px;
-    font-style: italic;
-  }
+  .file-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--accent2); margin-top: 10px; font-style: italic; }
 
   .controls-grid { display: grid; gap: 28px; }
-
-  .control-group label {
-    display: block;
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-
+  .control-group label { display: block; font-size: 12px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 14px; text-transform: uppercase; }
   .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-btn { padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-size: 13px; }
+  .mode-btn.active { border-color: rgba(200,168,255,0.45); background: rgba(200,168,255,0.08); color: var(--accent); }
 
-  .mode-btn {
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 13px;
-  }
+  .input-field { width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 16px; outline: none; font-family: 'DM Sans', sans-serif; }
+   .input-field::placeholder { color: var(--muted); opacity: 0.5; }
 
-  .mode-btn.active {
-    border-color: rgba(200,168,255,0.45);
-    background: rgba(200,168,255,0.08);
-    color: var(--accent);
-  }
+  .settings-section { display: none; }
+  .settings-section.active { display: grid; gap: 28px; }
 
-  .slider-display {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
+  .slider-display { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
+  .slider-value { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--accent); line-height: 1; }
+  input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent) var(--pct, 0%), rgba(200,168,255,0.15) var(--pct, 0%)); outline: none; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
 
-  .slider-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent) var(--pct, 0%), rgba(200,168,255,0.15) var(--pct, 0%));
-    outline: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--accent);
-  }
-
-  .process-btn {
-    width: 100%;
-    padding: 18px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgba(180,130,255,0.15), rgba(100,170,255,0.1));
-    border: 1px solid rgba(200,168,255,0.35);
-    color: var(--accent);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    cursor: pointer;
-  }
-
+  .process-btn { width: 100%; padding: 18px; border-radius: 14px; background: linear-gradient(135deg, rgba(180,130,255,0.15), rgba(100,170,255,0.1)); border: 1px solid rgba(200,168,255,0.35); color: var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 20px; cursor: pointer; margin-top: 12px; }
   .process-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
   .progress-area { display: none; margin-top: 20px; }
   .progress-area.show { display: block; }
-
   .progress-bar-track { height: 3px; background: rgba(200,168,255,0.1); border-radius: 2px; overflow: hidden; }
   .progress-bar-fill { height: 100%; background: var(--accent); transition: width 0.1s; }
-
   .download-area { display: none; text-align: center; padding-top: 8px; }
-  .download-area.show { display: block; }
-
-  .download-btn {
-    display: inline-flex;
-    padding: 14px 32px;
-    border-radius: 100px;
-    background: rgba(200,168,255,0.2);
-    border: 1px solid var(--accent);
-    color: var(--text);
-    text-decoration: none;
-  }
+  .download-area.show { display: block;}
+  .download-btn { display: inline-flex; padding: 14px 32px; border-radius: 100px; background: rgba(200,168,255,0.2); border: 1px solid var(--accent); color: var(--text); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -229,7 +79,7 @@
   </header>
 
   <div class="card">
-    <p class="card-label">01 — 上传</p>
+    <p class="card-label">01 — 上传音频</p>
     <div class="upload-zone" id="uploadZone">
       <input type="file" id="fileInput" accept="audio/*">
       <span class="upload-icon">✦</span>
@@ -239,55 +89,62 @@
   </div>
 
   <div class="card">
-    <p class="card-label">02 — 高级设置</p>
-    <div class="controls-grid">
-      <div class="control-group">
-        <label>叠加模式</label>
-        <div class="mode-toggle">
-          <button class="mode-btn active" onclick="setMode('concat', this)">🔗 顺序拼接</button>
-          <button class="mode-btn" onclick="setMode('overlay', this)">✦ 同步叠加</button>
-        </div>
-      </div>
+    <p class="card-label">02 — 选择处理模式</p>
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setProcessMode('repeatSection', this)">🔄 重复处理</button>
+        <button class="mode-btn" onclick="setProcessMode('modulateSection', this)">⚡ 高频处理</button>
+    </div>
+    <hr style="border-color: rgba(200,170,255,0.1); margin: 28px 0; border-style: solid;">
 
+    <div id="repeatSection" class="settings-section active">
+        <div class="control-group">
+            <label>▶️ 叠加方式</label>
+            <div class="mode-toggle">
+              <button class="mode-btn active" data-submode="concat" onclick="setRepeatSubMode('concat', this)">🔗 顺序拼接</button>
+              <button class="mode-btn" data-submode="overlay" onclick="setRepeatSubMode('overlay', this)">✦ 同步叠加</button>
+            </div>
+        </div>
+        <div class="control-group">
+            <label>🔁 重复次数 (Max 1000)</label>
+            <div class="slider-display"><span class="slider-value" id="repeatVal">10</span><span class="slider-unit">次</span></div>
+            <input type="range" id="repeatSlider" min="2" max="1000" value="10" oninput="updateSlider(this, 'repeatVal')">
+        </div>
+        <div class="control-group" id="volGroup" style="display:none">
+            <label>🔈 每层音量 (Min 1%)</label>
+            <div class="slider-display"><span class="slider-value" id="volVal">80</span><span class="slider-unit">%</span></div>
+            <input type="range" id="volSlider" min="1" max="100" value="80" oninput="updateSlider(this, 'volVal')">
+        </div>
+    </div>
+    
+    <div id="modulateSection" class="settings-section">
       <div class="control-group">
-        <label>重复次数 (Max 1000)</label>
-        <div class="slider-display">
-          <span class="slider-value" id="repeatVal">10</span>
-          <span class="slider-unit">次</span>
-        </div>
-        <input type="range" id="repeatSlider" min="2" max="1000" value="10" oninput="updateSlider(this, 'repeatVal')">
+        <label for="hzInput">🎯 目标高频赫兹 (例如 17500)</label>
+        <input type="number" id="hzInput" class="input-field" placeholder="建议 16000-19000" value="17500">
       </div>
-
-      <div class="control-group" id="volGroup" style="display:none">
-        <label>每层音量 (Min 1%)</label>
-        <div class="slider-display">
-          <span class="slider-value" id="volVal">80</span>
-          <span class="slider-unit">%</span>
-        </div>
-        <input type="range" id="volSlider" min="1" max="100" value="80" oninput="updateSlider(this, 'volVal')">
+      <div class="info-box" style="font-size: 13px; color: var(--muted); line-height: 1.6; background: var(--surface2); padding: 14px; border-radius: 10px; border: 1px solid var(--border)">
+          此模式将把你的音频内容“搭载”到指定的高频声波上，使其在“听不见”的超声波范围内播放。
       </div>
     </div>
   </div>
 
   <div class="card">
-    <p class="card-label">03 — 生成</p>
+    <p class="card-label">03 — 生成并下载</p>
     <button class="process-btn" id="processBtn" disabled onclick="processAudio()">✦ 开始处理</button>
     <div class="progress-area" id="progressArea">
       <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
       <p id="progressText" style="font-size:12px; margin-top:10px; text-align:center"></p>
     </div>
     <div class="download-area" id="downloadArea">
-      <a class="download-btn" id="downloadLink">⬇ 下载高频音频</a>
+      <a class="download-btn" id="downloadLink">⬇ 下载已处理音频</a>
     </div>
   </div>
 </div>
+
 <script>
 let audioBuffer = null;
 let audioCtx = null;
 let currentProcessMode = 'repeatSection';
 let repeatSubMode = 'concat';
-// 全局变量，用于存储上一次创建的 URL
-let previousObjectURL = null;
 
 // --- UI Management ---
 function updateSlider(el, valId) {
@@ -320,15 +177,10 @@ fileInput.onchange = (e) => {
     document.getElementById('fileName').textContent = file.name;
     document.getElementById('fileName').style.display = 'block';
     
+    // Reset from previous state
     document.getElementById('processBtn').disabled = true;
     document.getElementById('downloadArea').classList.remove('show');
     
-    // 撤销可能存在的上一个URL, 避免内存泄漏
-    if (previousObjectURL) {
-        URL.revokeObjectURL(previousObjectURL);
-        previousObjectURL = null;
-    }
-
     const reader = new FileReader();
     reader.onload = async (ev) => {
       try {
@@ -346,207 +198,19 @@ fileInput.onchange = (e) => {
   }
 };
 
-
 async function processAudio() {
     if (!audioBuffer) return;
     
-    const ui = {
+    // UI elements
+    const { btn, progressArea, fill, txt, downloadArea } = {
         btn: document.getElementById('processBtn'),
         progressArea: document.getElementById('progressArea'),
         fill: document.getElementById('progressFill'),
         txt: document.getElementById('progressText'),
-        downloadArea: document.getElementById('downloadArea'),
-        downloadLink: document.getElementById('downloadLink')
+        downloadArea: document.getElementById('downloadArea')
     };
     
-    // 在开始处理新音频之前，检查并撤销上一个创建的 Object URL。
-    if (previousObjectURL) {
-        URL.revokeObjectURL(previousObjectURL);
-        console.log("释放了旧的URL:", previousObjectURL);
-        previousObjectURL = null;
-    }
-
-    ui.btn.disabled = true;
-    ui.progressArea.classList.add('show');
-    ui.downloadArea.classList.remove('show');
-    ui.fill.style.width = '0%';
-    ui.txt.textContent = '初始化中...';
-
-    if (currentProcessMode === 'repeatSection' && repeatSubMode === 'concat') {
-        const repeats = parseInt(document.getElementById('repeatSlider').value, 10);
-        const estimatedSizeMB = audioBuffer.duration * audioBuffer.sampleRate * audioBuffer.numberOfChannels * 2 * repeats / (1024*1024);
-        if (estimatedSizeMB > 500) {
-            if (!confirm(`警告：预估文件大小约为 ${Math.round(estimatedSizeMB)}MB，可能导致浏览器卡顿。是否继续？`)) {
-                ui.btn.disabled = false;
-                ui.progressArea.classList.remove('show');
-                return;
-            }
-        }
-    }
-
-    try {
-        const result = await (currentProcessMode === 'modulateSection' 
-            ? processModulation() 
-            : processRepetition());
-        
-        if (result && result.blob) {
-            const newURL = URL.createObjectURL(result.blob);
-            ui.downloadLink.href = newURL; 
-            ui.downloadLink.download = result.downloadName;
-            
-            // 将新创建的 URL 存储在全局变量中
-            previousObjectURL = newURL;
-
-            ui.downloadArea.classList.add('show');
-            ui.txt.textContent = '处理完成！可以下载了。';
-        }
-    } catch (error) {
-        alert(error.message);
-        console.error("处理失败:", error);
-    } finally {
-        ui.btn.disabled = false;
-        ui.progressArea.classList.remove('show');
-    }
-}
-
-
-async function processModulation() {
-    document.getElementById('progressText').textContent = '准备高频调制...';
-    
-    const targetFreq = parseInt(document.getElementById('hzInput').value);
-    if (isNaN(targetFreq) || targetFreq <= 0) {
-      throw new Error(`高频赫兹设置无效，请输入一个正整数，例如 17500。`);
-    }
-
-    const { duration, numberOfChannels, sampleRate } = audioBuffer;
-    
-    // 创建一个离线上下文
-    const offlineCtx = new OfflineAudioContext(numberOfChannels, duration * sampleRate, sampleRate);
-
-	document.getElementById('progressFill').style.width = '20%';
-
-    const modulator = offlineCtx.createBufferSource();
-    modulator.buffer = audioBuffer;
-    
-    const shapingGain = offlineCtx.createGain();
-    
-    // 关键步骤：用原始音频信号去控制增益节点（音量）
-    modulator.connect(shapingGain.gain);
-
-    const carrier = offlineCtx.createOscillator();
-    carrier.type = 'sine';
-    carrier.frequency.value = targetFreq;
-    
-    // 让高频载波通过这个被控制的增益节点
-    carrier.connect(shapingGain);    
-    shapingGain.connect(offlineCtx.destination);
-    
-    // 同时开始
-    carrier.start();
-    modulator.start();
-    
-    document.getElementById('progressText').textContent = '执行振幅调制...';
-    document.getElementById('progressFill').style.width = '60%';
-    
-    let renderedBuffer;
-    try {
-        renderedBuffer = await offlineCtx.startRendering();
-    } catch(renderError) {
-        throw new Error(`音频渲染失败！\n可能是因为音频时长过长或设置过于极端，导致浏览器内存溢出。\n建议：尝试使用一个较短的音频文件。\n技术细节: ${renderError.message}`);
-    }
-
-    document.getElementById('progressText').textContent = '封装为 WAV 文件...';
-    document.getElementById('progressFill').style.width = '90%';
-    
-    const blob = bufferToWav(renderedBuffer);
-    const downloadName = `modulated_to_${targetFreq}Hz_sub.wav`;
-    
-    return { blob, downloadName };
-}
-
-async function processRepetition() {
-    const repeats = parseInt(document.getElementById('repeatSlider').value);
-    const vol = parseInt(document.getElementById('volSlider').value) / 100;
-    
-    const { sampleRate, numberOfChannels, duration } = audioBuffer;
-    const totalDuration = repeatSubMode === 'concat' ? duration * repeats : duration;
-    
-    const offlineCtx = new OfflineAudioContext(numberOfChannels, Math.ceil(totalDuration * sampleRate), sampleRate);
-    
-    const updateProgress = async (i) => {
-        if (i % 20 === 0 || i === repeats - 1) {
-            document.getElementById('progressFill').style.width = (i / repeats * 70) + '%';
-            document.getElementById('progressText').textContent = `${repeatSubMode === 'concat' ? '拼接' : '叠加'}中: ${i+1}/${repeats}`;
-            await new Promise(r => setTimeout(r, 0));
-        }
-    };
-    
-    if (repeatSubMode === 'concat') {
-        for (let i = 0; i < repeats; i++) {
-          const src = offlineCtx.createBufferSource();
-          src.buffer = audioBuffer;
-          src.connect(offlineCtx.destination);
-          src.start(i * duration);
-          await updateProgress(i);
-        }
-    } else { // overlay mode
-        // 对叠加模式的音量进行归一化处理，防止爆音
-        const gainValue = vol / repeats;
-        for (let i = 0; i < repeats; i++) {
-          const src = offlineCtx.createBufferSource();
-          const gain = offlineCtx.createGain();
-          gain.gain.value = gainValue; 
-          src.buffer = audioBuffer;
-          src.connect(gain).connect(offlineCtx.destination);
-          src.start(0);
-          await updateProgress(i);
-        }
-    }
-
-    document.getElementById('progressText').textContent = '渲染最终音频...';
-    document.getElementById('progressFill').style.width = '80%';
-    
-    let rendered;
-    try {
-        rendered = await offlineCtx.startRendering();
-    } catch(renderError) {
-         throw new Error(`音频渲染失败！\n可能是因为重复次数过多，导致浏览器内存溢出。\n建议：减少重复次数或使用较短的音频文件。\n技术细节: ${renderError.message}`);
-    }
-    
-    document.getElementById('progressText').textContent = '封装为 WAV 文件...';
-    document.getElementById('progressFill').style.width = '95%';
-    
-    const blob = bufferToWav(rendered);
-    const downloadName = `sub_${repeatSubMode}_x${repeats}.wav`;
-    
-    return { blob, downloadName };
-}
-
-
-function bufferToWav(buffer) {
-    const numChannels = buffer.numberOfChannels, sampleRate = buffer.sampleRate, numSamples = buffer.length;
-    const dataSize = numSamples * numChannels * 2;
-    const bufferSize = 44 + dataSize;
-    const arrayBuffer = new ArrayBuffer(bufferSize);
-    const view = new DataView(arrayBuffer);
-    const writeString = (offset, str) => { for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i)); };
-    writeString(0, 'RIFF'); view.setUint32(4, 36 + dataSize, true); writeString(8, 'WAVEfmt '); view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true); view.setUint16(22, numChannels, true); view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * numChannels * 2, true); view.setUint16(32, numChannels * 2, true);
-    view.setUint16(34, 16, true); writeString(36, 'data'); view.setUint32(40, dataSize, true);
-    let offset = 44;
-    for (let i = 0; i < numSamples; i++) {
-        for (let ch = 0; ch < numChannels; ch++) {
-            let s = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
-            view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-            offset += 2;
-        }
-    }
-    return new Blob([view], { type: 'audio/wav' });
-}
-</script>
-</body>
-</html>
+    btn.disabled = true;
     progressArea.classList.add('show');
     downloadArea.classList.remove('show');
     fill.style.width = '0%';
@@ -728,136 +392,7 @@ function bufferToWav(buffer) {
 }
 </script>
 </body>
-</html>isabled = false;
-    };
-    reader.readAsArrayBuffer(file);
-  }
-};
-
-// --- Core Audio Processing ---
-async function processAudio() {
-    if (!audioBuffer) { return; }
-    
-    // UI setup for processing
-    const btn = document.getElementById('processBtn');
-    const progressArea = document.getElementById('progressArea');
-    const fill = document.getElementById('progressFill');
-    const txt = document.getElementById('progressText');
-    const downloadArea = document.getElementById('downloadArea');
-    
-    btn.disabled = true;
-    progressArea.classList.add('show');
-    downloadArea.classList.remove('show');
-    fill.style.width = '0%';
-    txt.textContent = '初始化处理环境...';
-
-    // Route to the correct processor based on user's choice
-    if (currentProcessMode === 'modulateSection') {
-        await processModulation(progressArea, fill, txt);
-    } else {
-        await processRepetition(progressArea, fill, txt);
-    }
-    
-    btn.disabled = false;
-}
-
-// --- NEW Modulation Processor ---
-async function processModulation(progressArea, fill, txt) {
-    const targetFreq = parseInt(document.getElementById('hzInput').value);
-    if (isNaN(targetFreq) || targetFreq <= 0) {
-        alert("请输入一个有效的高频赫兹值 (如 17500)。");
-        progressArea.classList.remove('show');
-        return;
-    }
-
-    const { duration, numberOfChannels, sampleRate } = audioBuffer;
-    const offlineCtx = new OfflineAudioContext(numberOfChannels, duration * sampleRate, sampleRate);
-
-	  txt.textContent = `创建 ${targetFreq}Hz 载波...`;
-    fill.style.width = '20%';
-    await new Promise(r => setTimeout(r, 10)); // Allow UI update
-
-    // The Carrier: A high-frequency sine wave (e.g., 17500Hz)
-    const carrier = offlineCtx.createOscillator();
-    carrier.type = 'sine';
-    carrier.frequency.value = targetFreq;
-    carrier.start();
-
-    // The Modulator: Your original audio file
-    const modulator = offlineCtx.createBufferSource();
-    modulator.buffer = audioBuffer;
-    modulator.start();
-
-    // The Gain Node that ties them together
-    // Carrier's amplitude will be controlled by the modulator's signal
-    const shapingGain = offlineCtx.createGain();
-    
-    // Connect modulator to change the GAIN of the shaping node
-    modulator.connect(shapingGain.gain);
-    // Connect the carrier THROUGH the shaping node
-    carrier.connect(shapingGain);
-    shapingGain.connect(offlineCtx.destination);
-    
-    txt.textContent = `执行振幅调制...`;
-    fill.style.width = '60%';
-    await new Promise(r => setTimeout(r, 10));
-
-    // Render the final audio
-    const renderedBuffer = await offlineCtx.startRendering();
-    
-    txt.textContent = '封装为 WAV 文件...';
-    fill.style.width = '90%';
-    
-    const blob = bufferToWav(renderedBuffer);
-    const downloadName = `modulated_${targetFreq}Hz.wav`;
-    document.getElementById('downloadLink').href = URL.createObjectURL(blob);
-    document.getElementById('downloadLink').download = downloadName;
-
-    document.getElementById('downloadArea').classList.add('show');
-    progressArea.classList.remove('show');
-}
-
-
-// --- OLD Repetition Processor (with minor tweaks) ---
-async function processRepetition(progressArea, fill, txt) {
-    const repeats = parseInt(document.getElementById('repeatSlider').value);
-    const vol = parseInt(document.getElementById('volSlider').value) / 100;
-    
-    const { sampleRate, numberOfChannels, duration } = audioBuffer;
-    const totalDuration = repeatSubMode === 'concat' ? duration * repeats : duration;
-    const offlineCtx = new OfflineAudioContext(numberOfChannels, Math.ceil(totalDuration * sampleRate), sampleRate);
-    
-    if (repeatSubMode === 'concat') {
-        for (let i = 0; i < repeats; i++) {
-          const src = offlineCtx.createBufferSource();
-          src.buffer = audioBuffer;
-          src.connect(offlineCtx.destination);
-          src.start(i * duration);
-          if (i % 20 === 0) {
-            fill.style.width = (i / repeats * 70) + '%';
-            txt.textContent = `拼接中: ${i+1}/${repeats}`;
-            await new Promise(r => setTimeout(r, 0));
-          }
-        }
-    } else { // overlay mode
-        for (let i = 0; i < repeats; i++) {
-          const src = offlineCtx.createBufferSource();
-          const gain = offlineCtx.createGain();
-          gain.gain.value = vol;
-          src.buffer = audioBuffer;
-          src.connect(gain).connect(offlineCtx.destination);
-          src.start(0);
-          if (i % 20 === 0) {
-            fill.style.width = (i / repeats * 70) + '%';
-            txt.textContent = `叠加中: ${i+1}/${repeats}`;
-            await new Promise(r => setTimeout(r, 0));
-          }
-        }
-    }
-
-    txt.textContent = "正在渲染音频...";
-    fill.style.width = "80%";
-    const rendered = await offlineCtx.startRendering();
+</html>red = await offlineCtx.startRendering();
     
     txt.textContent = "正在封装 WAV 文件...";
     fill.style.width = "95%";
