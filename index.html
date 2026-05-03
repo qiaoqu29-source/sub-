@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>✦ Subliminal Studio</title>
+<title>✦ Subliminal Studio Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -31,7 +31,6 @@
     position: relative;
   }
 
-  /* Background */
   body::before {
     content: '';
     position: fixed;
@@ -44,7 +43,6 @@
     z-index: 0;
   }
 
-  /* Noise texture overlay */
   body::after {
     content: '';
     position: fixed;
@@ -63,11 +61,7 @@
     padding: 60px 24px 80px;
   }
 
-  /* Header */
-  header {
-    text-align: center;
-    margin-bottom: 56px;
-  }
+  header { text-align: center; margin-bottom: 56px; }
 
   .eyebrow {
     font-family: 'DM Sans', sans-serif;
@@ -93,14 +87,8 @@
     margin-bottom: 12px;
   }
 
-  .subtitle {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-    letter-spacing: 0.02em;
-  }
+  .subtitle { font-size: 14px; color: var(--muted); line-height: 1.6; letter-spacing: 0.02em; }
 
-  /* Card */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -120,10 +108,6 @@
     background: linear-gradient(90deg, transparent, rgba(200,168,255,0.4), transparent);
   }
 
-  .card:hover {
-    border-color: rgba(200,170,255,0.22);
-  }
-
   .card-label {
     font-size: 10px;
     letter-spacing: 0.25em;
@@ -134,7 +118,6 @@
     font-weight: 500;
   }
 
-  /* Upload zone */
   .upload-zone {
     border: 1.5px dashed rgba(200,168,255,0.25);
     border-radius: 14px;
@@ -142,58 +125,21 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
     background: rgba(200,168,255,0.02);
   }
 
   .upload-zone:hover, .upload-zone.dragover {
     border-color: rgba(200,168,255,0.5);
     background: rgba(200,168,255,0.05);
-    transform: scale(1.005);
   }
 
-  .upload-zone.has-file {
-    border-color: rgba(200,168,255,0.4);
-    background: rgba(200,168,255,0.06);
-    border-style: solid;
-  }
-
+  .upload-zone.has-file { border-color: rgba(200,168,255,0.4); border-style: solid; }
   #fileInput { display: none; }
 
-  .upload-icon {
-    font-size: 36px;
-    margin-bottom: 14px;
-    display: block;
-    filter: drop-shadow(0 0 12px rgba(200,168,255,0.4));
-  }
+  .upload-icon { font-size: 36px; margin-bottom: 14px; display: block; filter: drop-shadow(0 0 12px rgba(200,168,255,0.4)); }
+  .file-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--accent2); margin-top: 10px; font-style: italic; }
 
-  .upload-text {
-    font-size: 15px;
-    color: var(--text);
-    margin-bottom: 6px;
-    opacity: 0.8;
-  }
-
-  .upload-hint {
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.03em;
-  }
-
-  .file-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    color: var(--accent2);
-    margin-top: 10px;
-    font-style: italic;
-  }
-
-  /* Controls */
-  .controls-grid {
-    display: grid;
-    gap: 28px;
-  }
+  .controls-grid { display: grid; gap: 32px; }
 
   .control-group label {
     display: block;
@@ -204,236 +150,305 @@
     text-transform: uppercase;
   }
 
-  /* Mode toggle */
-  .mode-toggle {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
+  .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .mode-btn {
-    padding: 12px 16px;
+    padding: 12px;
     border-radius: 10px;
     border: 1px solid var(--border);
     background: transparent;
     color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
     cursor: pointer;
-    transition: all 0.25s;
-    text-align: center;
-  }
-
-  .mode-btn.active {
-    border-color: rgba(200,168,255,0.45);
-    background: rgba(200,168,255,0.08);
-    color: var(--accent);
-  }
-
-  .mode-btn:hover:not(.active) {
-    border-color: rgba(200,168,255,0.2);
-    color: var(--text);
-  }
-
-  .mode-desc {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 10px;
-    line-height: 1.6;
-    padding: 10px 14px;
-    background: rgba(255,255,255,0.02);
-    border-radius: 8px;
-    border-left: 2px solid rgba(200,168,255,0.3);
-  }
-
-  /* Slider */
-  .slider-wrapper {
-    position: relative;
-  }
-
-  .slider-display {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-
-  .slider-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
-    font-weight: 300;
-    color: var(--accent);
-    line-height: 1;
-    text-shadow: 0 0 30px rgba(200,168,255,0.3);
-  }
-
-  .slider-unit {
     font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
+    transition: 0.2s;
   }
+  .mode-btn.active { border-color: var(--accent); background: rgba(200,168,255,0.08); color: var(--accent); }
+
+  .slider-display { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
+  .slider-value { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--accent); line-height: 1; }
+  .slider-unit { font-size: 13px; color: var(--muted); }
 
   input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 3px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, var(--accent) var(--pct, 0%), rgba(200,168,255,0.15) var(--pct, 0%));
-    outline: none;
-    cursor: pointer;
+    -webkit-appearance: none; width: 100%; height: 3px; background: rgba(200,168,255,0.15); border-radius: 2px; outline: none;
   }
-
   input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 12px rgba(200,168,255,0.4);
-    transition: transform 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); cursor: pointer;
   }
 
-  input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.3);
-    box-shadow: 0 0 20px rgba(200,168,255,0.6);
-  }
-
-  .slider-ticks {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-    padding: 0 2px;
-  }
-
-  .slider-ticks span {
-    font-size: 10px;
-    color: var(--muted);
-    opacity: 0.5;
-  }
-
-  /* Volume */
-  .volume-row {
+  /* Pitch Input Styling */
+  .pitch-input-wrapper {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
+    background: rgba(255,255,255,0.03);
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
   }
-
-  .vol-label { font-size: 12px; color: var(--muted); min-width: 32px; text-align: right; }
-
-  /* Process button */
-  .process-btn {
-    width: 100%;
-    padding: 18px;
-    border-radius: 14px;
+  .pitch-input-wrapper input {
+    background: transparent;
     border: none;
-    background: linear-gradient(135deg, rgba(180,130,255,0.15) 0%, rgba(200,100,180,0.1) 50%, rgba(100,170,255,0.1) 100%);
-    border: 1px solid rgba(200,168,255,0.35);
-    color: var(--accent);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: all 0.35s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .process-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(200,168,255,0.08), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .process-btn:hover:not(:disabled)::before { opacity: 1; }
-  .process-btn:hover:not(:disabled) {
-    border-color: rgba(200,168,255,0.6);
-    box-shadow: 0 0 30px rgba(200,168,255,0.15);
-    transform: translateY(-1px);
-  }
-
-  .process-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* Progress */
-  .progress-area {
-    display: none;
-    margin-top: 20px;
-  }
-
-  .progress-area.show { display: block; }
-
-  .progress-bar-track {
-    height: 3px;
-    background: rgba(200,168,255,0.1);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 2px;
-    transition: width 0.3s ease;
-    box-shadow: 0 0 8px rgba(200,168,255,0.5);
-  }
-
-  .progress-text {
-    font-size: 12px;
-    color: var(--muted);
-    text-align: center;
-    letter-spacing: 0.05em;
-  }
-
-  /* Download area */
-  .download-area {
-    display: none;
-    text-align: center;
-    padding-top: 8px;
-  }
-
-  .download-area.show { display: block; }
-
-  .done-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-style: italic;
     color: var(--accent2);
-    margin-bottom: 16px;
-    text-shadow: 0 0 20px rgba(240,192,232,0.3);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    width: 60px;
+    outline: none;
+    text-align: center;
   }
+  .pitch-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
 
+  .process-btn {
+    width: 100%; padding: 18px; border-radius: 14px; background: transparent; border: 1px solid rgba(200,168,255,0.35);
+    color: var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 20px; cursor: pointer; transition: 0.3s;
+  }
+  .process-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(200,168,255,0.05); }
+  .process-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .progress-area { display: none; margin-top: 20px; text-align: center; }
+  .progress-area.show { display: block; }
+  .progress-bar-track { height: 3px; background: rgba(200,168,255,0.1); margin-bottom: 10px; }
+  .progress-bar-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+
+  .download-area { display: none; text-align: center; margin-top: 20px; }
+  .download-area.show { display: block; }
   .download-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 32px;
-    border-radius: 100px;
-    background: linear-gradient(135deg, rgba(200,168,255,0.2), rgba(240,192,232,0.15));
-    border: 1px solid rgba(200,168,255,0.4);
-    color: var(--text);
-    text-decoration: none;
-    font-size: 14px;
-    letter-spacing: 0.06em;
-    transition: all 0.3s;
-    cursor: pointer;
+    display: inline-block; padding: 14px 32px; border-radius: 100px; background: rgba(200,168,255,0.2);
+    border: 1px solid var(--accent); color: var(--text); text-decoration: none; transition: 0.3s;
+  }
+  .download-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(200,168,255,0.2); }
+
+  .particle { position: fixed; width: 2px; height: 2px; pointer-events: none; animation: float-up linear infinite; }
+  @keyframes float-up { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 0.5; } 100% { opacity: 0; transform: translateY(-200px); } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <p class="eyebrow">✦ Audio Manifestation Tool</p>
+    <h1>Subliminal<br>Studio</h1>
+    <p class="subtitle">让肯定语在频率的律动中重塑你的潜意识</p>
+  </header>
+
+  <div class="card">
+    <p class="card-label">01 — 上传音频</p>
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept="audio/*">
+      <span class="upload-icon">✦</span>
+      <p class="upload-text">选择你的肯定语素材</p>
+      <p class="file-name" id="fileName" style="display:none"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-label">02 — 调音 & 叠加设置</p>
+    <div class="controls-grid">
+      
+      <div class="control-group">
+        <label>音调偏移 (半音)</label>
+        <div class="pitch-input-wrapper">
+          <button class="mode-btn" style="padding:5px 15px" onclick="adjustPitch(-1)">-</button>
+          <input type="number" id="pitchShift" value="0" step="1" onchange="validatePitch()">
+          <button class="mode-btn" style="padding:5px 15px" onclick="adjustPitch(1)">+</button>
+          <span class="slider-unit">Semicones</span>
+        </div>
+        <p class="pitch-hint">正数提升音调，负数降低音调。12 为一个八度。</p>
+      </div>
+
+      <div class="control-group">
+        <label>叠加模式</label>
+        <div class="mode-toggle">
+          <button class="mode-btn active" data-mode="concat" onclick="setMode('concat', this)">🔗 顺序拼接</button>
+          <button class="mode-btn" data-mode="overlay" onclick="setMode('overlay', this)">✦ 同步叠加</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>重复次数</label>
+        <div class="slider-display">
+          <span class="slider-value" id="repeatVal">10</span>
+          <span class="slider-unit">次</span>
+        </div>
+        <input type="range" id="repeatSlider" min="2" max="100" value="10" oninput="document.getElementById('repeatVal').textContent=this.value">
+      </div>
+
+      <div class="control-group" id="volGroup" style="display:none">
+        <label>每层叠加音量</label>
+        <input type="range" id="volSlider" min="10" max="100" value="80">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-label">03 — 生成</p>
+    <button class="process-btn" id="processBtn" disabled onclick="processAudio()">✦ 开始炼制音频</button>
+    
+    <div class="progress-area" id="progressArea">
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+      <p id="progressText" style="font-size:12px; color:var(--muted)">准备中...</p>
+    </div>
+
+    <div class="download-area" id="downloadArea">
+      <a class="download-btn" id="downloadLink" download="subliminal.wav">⬇ 下载潜意识音频</a>
+    </div>
+  </div>
+</div>
+
+<script>
+let audioBuffer = null;
+let currentMode = 'concat';
+let audioCtx = null;
+
+// Pitch Adjusters
+function adjustPitch(val) {
+  const input = document.getElementById('pitchShift');
+  input.value = parseInt(input.value) + val;
+  validatePitch();
+}
+
+function validatePitch() {
+  const input = document.getElementById('pitchShift');
+  if (input.value === "") input.value = 0;
+}
+
+function setMode(mode, btn) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('volGroup').style.display = mode === 'overlay' ? 'block' : 'none';
+}
+
+// Upload Handling
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+
+uploadZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) {
+    document.getElementById('fileName').textContent = f.name;
+    document.getElementById('fileName').style.display = 'block';
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      audioCtx = audioCtx || new AudioContext();
+      audioBuffer = await audioCtx.decodeAudioData(ev.target.result);
+      document.getElementById('processBtn').disabled = false;
+    };
+    reader.readAsArrayBuffer(f);
+  }
+});
+
+async function processAudio() {
+  if (!audioBuffer) return;
+
+  const repeats = parseInt(document.getElementById('repeatSlider').value);
+  const pitchShift = parseInt(document.getElementById('pitchShift').value);
+  const volPct = parseInt(document.getElementById('volSlider').value) / 100;
+  
+  // Calculate playback rate based on pitch shift (2^(n/12))
+  const playbackRate = Math.pow(2, pitchShift / 12);
+
+  document.getElementById('processBtn').disabled = true;
+  document.getElementById('progressArea').classList.add('show');
+  document.getElementById('downloadArea').classList.remove('show');
+
+  const sampleRate = audioBuffer.sampleRate;
+  const channels = audioBuffer.numberOfChannels;
+  // Adjusted duration because pitch shifting via playbackRate changes length
+  const adjustedDuration = audioBuffer.duration / playbackRate;
+
+  let offlineCtx;
+  if (currentMode === 'concat') {
+    offlineCtx = new OfflineAudioContext(channels, Math.ceil(sampleRate * adjustedDuration * repeats), sampleRate);
+    for (let i = 0; i < repeats; i++) {
+      const src = offlineCtx.createBufferSource();
+      src.buffer = audioBuffer;
+      src.playbackRate.value = playbackRate;
+      src.connect(offlineCtx.destination);
+      src.start(i * adjustedDuration);
+    }
+  } else {
+    offlineCtx = new OfflineAudioContext(channels, Math.ceil(sampleRate * adjustedDuration), sampleRate);
+    for (let i = 0; i < repeats; i++) {
+      const gain = offlineCtx.createGain();
+      gain.gain.value = volPct;
+      const src = offlineCtx.createBufferSource();
+      src.buffer = audioBuffer;
+      src.playbackRate.value = playbackRate;
+      src.connect(gain);
+      gain.connect(offlineCtx.destination);
+      src.start(0);
+    }
   }
 
-  .download-btn:hover {
-    background: linear-gradient(135deg, rgba(200,168,255,0.3), rgba(240,192,232,0.25));
-    box-shadow: 0 0 24px rgba(200,168,255,0.2);
-    transform: translateY(-2px);
-  }
+  document.getElementById('progressText').textContent = "正在渲染高频能量...";
+  document.getElementById('progressFill').style.width = "50%";
 
-  .info-box {
+  const renderedBuffer = await offlineCtx.startRendering();
+  const wavBlob = bufferToWav(renderedBuffer);
+  
+  const url = URL.createObjectURL(wavBlob);
+  const dl = document.getElementById('downloadLink');
+  dl.href = url;
+  dl.download = `sub_pitch${pitchShift}_x${repeats}.wav`;
+  
+  document.getElementById('progressFill').style.width = "100%";
+  document.getElementById('progressText').textContent = "渲染完成";
+  document.getElementById('downloadArea').classList.add('show');
+  document.getElementById('processBtn').disabled = false;
+}
+
+// Basic WAV Encoder
+function bufferToWav(buffer) {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const samples = buffer.length;
+  const blockAlign = numChannels * 2;
+  const dataSize = samples * blockAlign;
+  const bufSize = 44 + dataSize;
+  const ab = new ArrayBuffer(bufSize);
+  const view = new DataView(ab);
+
+  const writeString = (off, s) => { for (let i = 0; i < s.length; i++) view.setUint8(off + i, s.charCodeAt(i)); };
+  writeString(0, 'RIFF');
+  view.setUint32(4, bufSize - 8, true);
+  writeString(8, 'WAVE');
+  writeString(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * blockAlign, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, 16, true);
+  writeString(36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  let offset = 44;
+  for (let i = 0; i < samples; i++) {
+    for (let ch = 0; ch < numChannels; ch++) {
+      let s = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
+      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      offset += 2;
+    }
+  }
+  return new Blob([ab], { type: 'audio/wav' });
+}
+
+// Particle Effect
+setInterval(() => {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.bottom = '0';
+  p.style.background = 'var(--accent)';
+  p.style.animationDuration = (3 + Math.random() * 3) + 's';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 6000);
+}, 1000);
+</script>
+</body>
+</html>
+fo-box {
     background: rgba(143,208,255,0.05);
     border: 1px solid rgba(143,208,255,0.15);
     border-radius: 12px;
